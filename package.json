@@ -1,0 +1,20 @@
+{
+  "name": "visualsApp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "nuxt": "^2.14.0",
+    "vue-chartjs": "^3.5.1",
+    "vuex-map-fields": "^1.4.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.11.2"
+  }
+}
