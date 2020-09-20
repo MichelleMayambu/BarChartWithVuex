@@ -1,39 +1,19 @@
-
 <script>
 import { mapFields, mapMultiRowFields } from "vuex-map-fields";
-import { Bar , mixins } from "vue-chartjs";
-import axios from "axios";
+import { Bar } from "vue-chartjs";
 export default {
   extends: Bar,
-  mixins: [mixins.reactiveData],
   props: {
-    data: { type: Object, default: null },
-  },
-  data() {
-    return {
-    }
+    data: { type: Object, default: null }
   },
   computed:{
+    refreshchartData: function() {
+      return this.data;
+    },
     ...mapMultiRowFields(["chartData.chartDetails.defaultData"])
-    
-  },
-  created() {
-    axios.get("http://localhost:4000/defaultData").then(res => {
-      let responseData = res.data;
-      this.chartData = {
-         labels: responseData.map(item => item.month),
-          datasets: [{
-              label: "sales",
-             backgroundColor:"#43A047",
-             data: responseData.map(item => item.value)
-          } 
-          ]
-      }
-    })
-    console.log(" response array", this.responseArray)
   },
   mounted() {
-    this.renderChart(this.chartData, {
+    this.renderChart(this.data, {
       responsive: true,
       maintainAspectRatio: false,
       scales: {

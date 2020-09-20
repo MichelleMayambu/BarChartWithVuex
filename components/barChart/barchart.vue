@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div> 
         <v-card>
           <v-card-title>BarChart</v-card-title>
         <v-row>
@@ -21,9 +21,16 @@
                   </v-text-field>
                 </div>
                  </div>
+              <v-btn color="success" small dense outlined rounded @click="postDataToServer">PostData</v-btn>
+
             </v-col>
            <v-col cols="12" md="7">
-             <chart
+             <v-btn color="success" small dense outlined rounded @click="loadData">Generate Chart Data</v-btn>
+             <chart v-if="loaded"
+             :key="chartKey"
+             :data="chartdata"
+             :options="chartOptions"
+             :styles="styles"
                     />
             </v-col>
         </v-row>
@@ -34,7 +41,8 @@
 <script>
 import chart from "~/components/barChart/chart.vue";
 import { mapFields, mapMultiRowFields } from "vuex-map-fields";
-import { mapActions} from 'vuex'
+import { mapActions} from 'vuex';
+import axios from "axios";
 
 export default {
     components:{
@@ -42,6 +50,8 @@ export default {
     },
     data() {
         return {
+          sourceData :this.defaultData,
+          loaded : false,
            chartKey: 0,
              chartColors: {
                  green: "#43A047",
@@ -76,11 +86,15 @@ export default {
       }
     },
     mounted() {
-    this.fillData();
+      this.$store.dispatch("chartData/loadData");
     },
     computed: {
-          ...mapMultiRowFields(["chartData.chartDetails.defaultData"])
+          ...mapMultiRowFields(["chartData.chartDetails.defaultData"]), 
     },
+    created() {
+      this.$store.dispatch("chartData/loadData");
+      this.fillData();
+  },
   methods:{
     fillData(){
       this.refreshChart();
@@ -100,11 +114,13 @@ export default {
             };
             this.pushData();
             this.chartKey += 1
+           
     },
     pushData() {
       //1. loop through our sampleData object array
        for( let i = 0; i < this.defaultData.length ; i++ ) {
                  //2 define colors for our values
+                 console.log("data from store", this.defaultData)
                   this.chartdata.labels.push(this.defaultData[i].month);
                   this.chartdata.datasets[0].data.push(this.defaultData[i].value);
                 if(this.chartdata.datasets[0].data[i] < 50 ) {
@@ -116,7 +132,22 @@ export default {
                 }
             }
           
-       }
+       },
+    loadData() {
+    this.loaded= true;
+    this.refreshChart();
+  },
+  postDataToServer() {
+    axios.post("http://localhost:4000/responseData", {
+     headers: {
+      "Content-Type": "application/json"
+     }, 
+       "payload" : this.defaultData
+    });
+     console.log("postdata", this.defaultData)
+    alert("data has been posted");
   }
+  },
+  
 }
 </script>

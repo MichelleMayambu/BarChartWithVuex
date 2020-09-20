@@ -7,12 +7,20 @@ export const state = () => ({
 });
 
 export const actions = {
-    
+    loadData ({commit}) {
+        axios.get("http://localhost:4000/defaultData").then(response =>{
+            commit("getChartData",response.data);
+        })
+    }
 }
 export const getters = {
     getField
   };
   
  export const mutations ={
-    updateField
+    updateField,
+    getChartData(state, defaultData){
+        state.chartDetails.defaultData = defaultData;
+      
+    } 
  } 
