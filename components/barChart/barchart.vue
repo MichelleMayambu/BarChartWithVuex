@@ -138,7 +138,7 @@ export default {
     this.refreshChart();
   },
   postDataToServer() {
-    axios.post("http://localhost:4000/responseData", {
+    axios.post("API address here", {
      headers: {
       "Content-Type": "application/json"
      }, 
