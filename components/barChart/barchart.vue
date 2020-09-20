@@ -24,11 +24,6 @@
             </v-col>
            <v-col cols="12" md="7">
              <chart
-                      :key="chartKey"
-                      ref="patternchart"
-                      :data="chartdata"
-                      :options="chartOptions"
-                      :styles="styles"
                     />
             </v-col>
         </v-row>
@@ -39,6 +34,7 @@
 <script>
 import chart from "~/components/barChart/chart.vue";
 import { mapFields, mapMultiRowFields } from "vuex-map-fields";
+import { mapActions} from 'vuex'
 
 export default {
     components:{
@@ -84,7 +80,6 @@ export default {
     },
     computed: {
           ...mapMultiRowFields(["chartData.chartDetails.defaultData"])
-
     },
   methods:{
     fillData(){
